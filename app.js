@@ -3,8 +3,8 @@ const _ = require("lodash");
 const yargs = require("yargs");
 const notes = require("./notes.js");
 
-const command = process.argv[2];
 const argv = yargs.argv;
+const command = argv._[0];
 
 switch (command) {
     case "add":
@@ -16,4 +16,9 @@ switch (command) {
     case "read":
         notes.getNote(argv.title);
         break;
+    case "remove":
+        notes.removeNote(argv.title);
+        break;
+    default:
+        console.log("Command not recognized!");
 }
