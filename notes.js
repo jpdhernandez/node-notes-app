@@ -5,7 +5,7 @@ const addNote = (title, body) => {
     let notes = [];
     const note = { title, body };
     try {
-        const notesString = fs.readFileSync("notes-data.json");
+        fs.readFile("notes-data.json", (err, notesString));
         notes = JSON.parse(notesString);
     } catch (e) {
         // silently ignore error
@@ -15,7 +15,10 @@ const addNote = (title, body) => {
 
     if (duplicateNotes.length === 0) {
         notes.push(note);
-        fs.writeFileSync("notes-data.json", JSON.stringify(notes));
+        fs.writeFile("notes-data.json", JSON.stringify(notes), (err) => {
+            if (err) return console.error(err);
+            console.log(`Note's saved!`)
+        });
     } else {
         console.error(`Note with title "${title}" already exists!`);
     }
