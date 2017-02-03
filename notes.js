@@ -1,24 +1,24 @@
 const fs = require("fs");
 const _ = require("underscore");
 
+const fetchNotes = () => {
+    return JSON.parse(fs.readFileSync("notes-data.json"));
+}
+
+const saveNotes = (notes) => {
+    fs.writeFileSync("notes-data.json", JSON.stringify(notes));
+}
+
 const addNote = (title, body) => {
-    let notes = [];
+    const notes = fetchNotes() || [];
     const note = { title, body };
-    try {
-        fs.readFile("notes-data.json", (err, notesString));
-        notes = JSON.parse(notesString);
-    } catch (e) {
-        // silently ignore error
-    }
 
     const duplicateNotes = _.filter(notes, (note) => note.title === title);
 
     if (duplicateNotes.length === 0) {
         notes.push(note);
-        fs.writeFile("notes-data.json", JSON.stringify(notes), (err) => {
-            if (err) return console.error(err);
-            console.log(`Note's saved!`)
-        });
+        saveNotes(notes);
+        console.log(`Note created!\n-------------\nTitle: ${note.title}\nBody : ${note.body}`);
     } else {
         console.error(`Note with title "${title}" already exists!`);
     }
@@ -33,7 +33,9 @@ const getNote = (title) => {
 }
 
 const removeNote = (title) => {
-    console.log("Removing note", title);
+    const notes = fetchNotes();
+    saveNotes(_.without(notes, _.findWhere(notes, { title })));
+    console.log(`Note with title "${title}" removed`);
 }
 
 module.exports = { addNote, getAll, getNote, removeNote };
