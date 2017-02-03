@@ -26,9 +26,7 @@ const addNote = (title, body) => {
 
 const getAll = () => {
     const notes = fetchNotes();
-    _.each(notes, (note) => {
-        console.log(`\nTitle: ${note.title}\nBody : ${note.body}\n`);
-    });
+    _.each(notes, (note) => console.log(`\nTitle: ${note.title}\nBody : ${note.body}\n`));
 }
 
 const getNote = (title) => {

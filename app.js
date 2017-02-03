@@ -3,7 +3,32 @@ const _ = require("lodash");
 const yargs = require("yargs");
 const notes = require("./notes.js");
 
-const argv = yargs.argv;
+const titleOptions = {
+    describe: "Title of note",
+    demand: true,
+    alias: "t"
+};
+const bodyOptions = {
+    describe: "Body of the note",
+    demand: true,
+    alias: "b"
+};
+
+const argv = yargs
+    .command("add", "Add a new note", {
+        title: titleOptions,
+        body: bodyOptions
+    })
+    .command("list", "List all notes")
+    .command("read", "Read a note", {
+        title: titleOptions
+    })
+    .command("remove", "Remove a note", {
+        title: bodyOptions
+    })
+    .help()
+    .argv;
+
 const command = argv._[0];
 
 switch (command) {
@@ -20,5 +45,5 @@ switch (command) {
         notes.removeNote(argv.title);
         break;
     default:
-        console.log("Command not recognized!");
+        console.log(`Command "${command}" not recognized`);
 }
