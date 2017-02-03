@@ -25,17 +25,25 @@ const addNote = (title, body) => {
 };
 
 const getAll = () => {
-    console.log("Getting all notes")
+    const notes = fetchNotes();
+    _.each(notes, (note) => {
+        console.log(`\nTitle: ${note.title}\nBody : ${note.body}\n`);
+    });
 }
 
 const getNote = (title) => {
-    console.log("Getting note", title);
+    const notes = fetchNotes();
+    const note = _.findWhere(notes, { title });
+    const message = note ? `Title: ${note.title}\nBody : ${note.body}` : `Note with title "${title}" not found`;
+    console.log(message);
 }
 
 const removeNote = (title) => {
     const notes = fetchNotes();
-    saveNotes(_.without(notes, _.findWhere(notes, { title })));
-    console.log(`Note with title "${title}" removed`);
+    const filteredNotes = _.without(notes, _.findWhere(notes, { title }))
+    saveNotes(filteredNotes);
+    const message = notes.length !== filteredNotes.length ? `Note with title "${title}" removed` : `Note with title "${title}" not found`;
+    console.log(message);
 }
 
 module.exports = { addNote, getAll, getNote, removeNote };
